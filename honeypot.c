@@ -2,13 +2,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-client init_client(){
-    client new_client;
-    new_client.state = CLIENT_NORMAL;
-    new_client.crashes = 0;
-    return new_client;
-}
-
 int* init_servers(){
     int* servers = (int*) malloc(MAX_SERVERS * sizeof(int));
     int i;
