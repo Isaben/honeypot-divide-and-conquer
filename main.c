@@ -5,7 +5,7 @@
 
 int main(){
     srand(time(NULL));
-    printf("SEQUENCIALMENTE: %d segundos", examine_servers_sequentially());
-    
+    printf("SEQUENCIALMENTE: %d segundos\n", examine_servers_sequentially());
+    printf("DIVISÃO E CONQUISTA: %d segundos\n", divide_and_conquer_servers());
     return 0;
 }

@@ -25,4 +25,10 @@ int* init_servers();
 // retorna o tempo necessário para examinar de acordo com os parâmetros
 int examine_servers_sequentially();
 
-#endif 
+// examina os servidores recursivamente, armazena o tempo no ponteiro total_time
+void examine_servers_recursively(int* servers, int* total_time, int start, int end);
+
+// retorna o tempo necessário para examinar os servidores usando divisão e conquista
+int divide_and_conquer_servers();
+
+#endif
