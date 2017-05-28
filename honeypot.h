@@ -9,7 +9,7 @@
 #define RESPONSE_TIME 5 // 5 segundos, simular tempo de resposta dos servidores. Ti do artigo
 #define RESET_TIME 10 // 10 segundos, simular tempo de reset do client. Tr do artigo
 #define MAX_SERVERS 50 // quantidade de servidores
-#define PROB_MALICIOUS 20 // em porcentagem e.g se 20, significa 20% de chance de um servidor ser malicioso. Utilizado na init_servers()
+#define PROB_MALICIOUS 5 // em porcentagem e.g se 20, significa 20% de chance de um servidor ser malicioso. Utilizado na init_servers()
 
 typedef struct client {
     int state;
