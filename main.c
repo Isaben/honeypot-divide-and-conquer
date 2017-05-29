@@ -31,15 +31,16 @@ int* init_servers(){
 /*  Retorna o tempo necessário para examinar os servidores usando a estratégia
     sequencial, de acordo com os parâmetros definidos nas macros.
 */
-int examine_servers_sequentially(int* servers){
+int examine_servers_sequentially(int* servers, int* malicious_servers){
     int total_time = 0;
     int i;
 
     for(i = 0; i < MAX_SERVERS; i++){
         total_time += (RESPONSE_TIME + WAIT_TIME);
-        if(servers[i] == MALICIOUS)
+        if(servers[i] == MALICIOUS) {
+            malicious_servers[i] = 1;
             total_time += RESET_TIME;
-
+        }
     }
 
     return total_time;
@@ -47,9 +48,9 @@ int examine_servers_sequentially(int* servers){
 
 /* Examina os servidores recursivamente, armazena o tempo no ponteiro total_time
 */
-void examine_servers_recursively(int* servers, int* total_time, int start, int end) {
+void examine_servers_recursively(int* servers, int* malicious_servers, int* total_time, int start, int end) {
 
-    if(start < end - 1) {
+    if(start < end) {
         int middle = (end + start)/2;
 
         int i;
@@ -63,8 +64,12 @@ void examine_servers_recursively(int* servers, int* total_time, int start, int e
 
         if(flag_malicious) {
             *total_time += RESET_TIME;
-            examine_servers_recursively(servers, total_time, start, middle);
-            examine_servers_recursively(servers, total_time, middle, end);
+            if(start < end -1 ) {
+                examine_servers_recursively(servers, malicious_servers, total_time, start, middle);
+                examine_servers_recursively(servers, malicious_servers, total_time, middle, end);
+            } else {
+                malicious_servers[start] = 1;
+            }
         }
     }
 }
@@ -72,14 +77,23 @@ void examine_servers_recursively(int* servers, int* total_time, int start, int e
 /*  Retorna o tempo necessário para examinar os servidores usando a estratégia
     de divisão e conquista, de acordo com os parâmetros definidos nas macros.
 */
-int divide_and_conquer_servers(int* servers){
+int divide_and_conquer_servers(int* servers, int* malicious_servers){
 
     int* total_time = malloc(sizeof(int));
     *total_time = 0;
 
-    examine_servers_recursively(servers, total_time, 0, MAX_SERVERS);
+    examine_servers_recursively(servers, malicious_servers, total_time, 0, MAX_SERVERS);
 
     return *total_time;
+}
+
+/*  Função que verifica se a classificação de servidores maliciosos foi realizada
+    com sucesso.
+*/
+int check(int* servers, int* malicious_servers) {
+    int i;
+    for(i=0; i < MAX_SERVERS; i++) if(servers[i] != malicious_servers[i]) return 0;
+    return 1;
 }
 
 int main(){
@@ -103,8 +117,14 @@ int main(){
     int i;
     for(i=0; i < N; i++) {
         int* servers = init_servers();
-        sum_seq += examine_servers_sequentially(servers);
-        sum_dav += divide_and_conquer_servers(servers);
+
+        int* malicious_servers = calloc(MAX_SERVERS, sizeof(int));
+        sum_seq += examine_servers_sequentially(servers, malicious_servers);
+        if(!check(servers, malicious_servers)) exit(-1);
+
+        malicious_servers = calloc(MAX_SERVERS, sizeof(int));
+        sum_dav += divide_and_conquer_servers(servers, malicious_servers);
+        if(!check(servers, malicious_servers)) exit(-1);
     }
 
     printf("Resultados:\n");
