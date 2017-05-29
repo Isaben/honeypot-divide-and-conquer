@@ -31,9 +31,8 @@ int* init_servers(){
 /*  Retorna o tempo necessário para examinar os servidores usando a estratégia
     sequencial, de acordo com os parâmetros definidos nas macros.
 */
-int examine_servers_sequentially(){
+int examine_servers_sequentially(int* servers){
     int total_time = 0;
-    int* servers = init_servers();
     int i;
 
     for(i = 0; i < MAX_SERVERS; i++){
@@ -73,9 +72,7 @@ void examine_servers_recursively(int* servers, int* total_time, int start, int e
 /*  Retorna o tempo necessário para examinar os servidores usando a estratégia
     de divisão e conquista, de acordo com os parâmetros definidos nas macros.
 */
-int divide_and_conquer_servers(){
-
-    int* servers = init_servers();
+int divide_and_conquer_servers(int* servers){
 
     int* total_time = malloc(sizeof(int));
     *total_time = 0;
@@ -87,7 +84,8 @@ int divide_and_conquer_servers(){
 
 int main(){
     srand(time(NULL));
-    printf("SEQUENCIALMENTE: %d segundos\n", examine_servers_sequentially());
-    printf("DIVISÃO E CONQUISTA: %d segundos\n", divide_and_conquer_servers());
+    int* servers = init_servers();
+    printf("SEQUENCIALMENTE: %d segundos\n", examine_servers_sequentially(servers));
+    printf("DIVISÃO E CONQUISTA: %d segundos\n", divide_and_conquer_servers(servers));
     return 0;
 }
