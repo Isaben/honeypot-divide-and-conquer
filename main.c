@@ -83,9 +83,36 @@ int divide_and_conquer_servers(int* servers){
 }
 
 int main(){
+
+    int N = 100;
     srand(time(NULL));
-    int* servers = init_servers();
-    printf("SEQUENCIALMENTE: %d segundos\n", examine_servers_sequentially(servers));
-    printf("DIVISÃO E CONQUISTA: %d segundos\n", divide_and_conquer_servers(servers));
+
+    printf("Algoritmos de detecção de servidores maliciosos\n");
+    printf("Simulação das estratégias sequencial e divisão e conquista\n\n");
+
+    printf("Parâmetros da simulação:\n");
+    printf("Número de servidores: %d\n", MAX_SERVERS);
+    printf("Probabilidade de servidores maliciosos: %d%%\n", PROB_MALICIOUS);
+    printf("Tempo de resposta dos servidores: %ds\n", RESPONSE_TIME);
+    printf("Tempo de classificação: %ds\n", WAIT_TIME);
+    printf("Tempo de reinicialização do honeypot a um estado limpo: %ds\n\n", RESET_TIME);
+
+    unsigned long sum_seq = 0;
+    unsigned long sum_dav = 0;
+
+    int i;
+    for(i=0; i < N; i++) {
+        int* servers = init_servers();
+        sum_seq += examine_servers_sequentially(servers);
+        sum_dav += divide_and_conquer_servers(servers);
+    }
+
+    printf("Resultados:\n");
+    printf("-------------------------------------------------------\n");
+    printf("|  Estratégia   |  Sequencial  |  Divisão e Conquisa  |\n");
+    printf("|-------------- |------------- |----------------------|\n");
+    printf("|  Tempo médio  |  %6lu s    |      %6lu s        |\n", sum_seq/N, sum_dav/N);
+    printf("-------------------------------------------------------\n");
+
     return 0;
 }
