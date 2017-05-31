@@ -120,11 +120,17 @@ int main(){
 
         int* malicious_servers = calloc(MAX_SERVERS, sizeof(int));
         sum_seq += examine_servers_sequentially(servers, malicious_servers);
-        if(!check(servers, malicious_servers)) exit(-1);
+        if(!check(servers, malicious_servers)) {
+            printf("Erro na detecção de servidores maliciosos pela estratégia sequencial");
+            exit(-1);
+        }
 
         malicious_servers = calloc(MAX_SERVERS, sizeof(int));
         sum_dav += divide_and_conquer_servers(servers, malicious_servers);
-        if(!check(servers, malicious_servers)) exit(-1);
+        if(!check(servers, malicious_servers)) {
+            printf("Erro na detecção de servidores maliciosos pela estratégia de divisão e conquista");
+            exit(-1);
+        }
     }
 
     printf("Resultados:\n");
